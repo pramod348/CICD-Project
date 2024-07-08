@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: mc-app
-        image: pramod348/cicd:6
+        image: pramod348/cicd:7
         ports:
         - containerPort: 8080
 
