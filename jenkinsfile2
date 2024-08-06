@@ -1,43 +1,34 @@
 pipeline {
     agent any
-    tools{
-        jdk 'jdk-8'
-    }
+	
+	tools {
+    jdk 'JAVA1.8'
+
+  }
 
     stages {
-        stage('git') {
+        stage('CLONE SCM') {
             steps {
-                echo 'scm'
-				git branch: 'main', url: 'https://github.com/devopstraininghub/mindcircuit13.git'
+                echo 'cloning code from Github'
+				git branch: 'main', url: 'https://github.com/devopstraininghub/webapp1.git'
             }
         }
 		
-		stage('sonar') {
+
+		
+			
+		stage('Build Artifact') {
             steps {
-                echo 'scanning project'
-			    sh '''mvn sonar:sonar \\
-  -Dsonar.host.url=http://3.83.18.215:9000 \\
-  -Dsonar.login=ae71c2e5c7b3c5932dea385c16eb074bd9ad764d'''
+                echo 'Build Artifact with maven build tool'
+				sh 'mvn clean sonar:sonar deploy'
             }
         }
 		
-		stage('build') {
-            steps {
-                echo 'generating artifact using maven build tool'
-			    sh 'mvn clean install'
-            }
-        }
 		
-		stage('nexus artifactory') {
+		stage('Deploy') {
             steps {
-                echo 'publish to nexus'
-			    sh 'mvn  deploy'
-            }
-        }
-		stage('deploy to tomcat') {
-            steps {
-                echo 'tomcat deploy'
-			    deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://100.25.144.30:8091/')], contextPath: 'mc-app-batch13', war: '**/*.war'
+                echo 'Deploy to tomcat ap/n server '
+				deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://34.224.5.225:8081/')], contextPath: 'b12book', war: '**/*.war'
             }
         }
     }
