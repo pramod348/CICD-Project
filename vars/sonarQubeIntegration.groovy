@@ -1,8 +1,8 @@
 // vars/sonarQubeIntegration.groovy
 def call() {
     // Check if SonarQube URL and Token are available
-    if (!env.SONAR_URL || !env.SONAR_TOKEN) {
-        error "SONAR_URL and SONAR_TOKEN must be defined in the .env file"
+    if (!env.SONAR_HOST_URL || !env.SONAR_AUTH_TOKEN) {
+        error "SONAR_HOST_URL and SONAR_AUTH_TOKEN must be defined in the .env file"
     }
 
     // Configure the SonarQube scanner for Jenkins
