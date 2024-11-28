@@ -12,8 +12,8 @@ def call() {
             mvn clean install sonar:sonar \
             -Dsonar.projectKey=${env.SONAR_PROJECT_KEY} \
             -Dsonar.projectName=${env.SONAR_PROJECT_NAME} \
-            -Dsonar.host.url=${env.SONAR_URL} \
-            -Dsonar.login=${env.SONAR_TOKEN}
+            -Dsonar.host.url=${env.SONAR_HOST_URL} \
+            -Dsonar.login=${env.SONAR_AUTH_TOKEN}
         """
     }
 }
