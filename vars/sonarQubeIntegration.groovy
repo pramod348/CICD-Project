@@ -6,7 +6,7 @@ def call() {
     }
 
     // Configure the SonarQube scanner for Jenkins
-    withEnv(["SONAR_HOST_URL=${env.SONAR_URL}", "SONAR_LOGIN=${env.SONAR_TOKEN}"]) {
+    withEnv(["SONAR_HOST_URL=${env.SONAR_URL}", "SONAR_LOGIN=${env.SONAR_AUTH_TOKEN}"]) {
         // Run the SonarQube scan using Maven (or adjust based on your build tool)
         sh """
             mvn clean install sonar:sonar \
