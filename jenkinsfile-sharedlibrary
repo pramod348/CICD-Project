@@ -14,9 +14,9 @@ pipeline {
             }
         }
     
-        stage('helloworlds') {
+        stage('helloworld') {
             steps {
-                // helloWorld()  // Calling the helloWorld function from shared library
+                helloWorld()  // Calling the helloWorld function from shared library
             }
         }
         
