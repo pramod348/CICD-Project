@@ -14,7 +14,7 @@ pipeline {
             }
         }
     
-        stage('helloworld') {
+        stage('helloworlds') {
             steps {
                 // helloWorld()  // Calling the helloWorld function from shared library
             }
