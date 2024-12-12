@@ -1,0 +1,66 @@
+@Library("jenkins-shared-libraries") _
+
+pipeline {
+    agent any  // This tells Jenkins to run the pipeline on any available agent
+    
+    tools {
+        jdk 'JAVA_HOME'
+        maven 'MAVEN_HOME'
+    }
+
+    environment {
+        // Define SonarQube-related variables globally so they are accessible in all stages
+        SONARQUBE_URL = ''
+        SONARQUBE_PROJECT_KEY = ''
+        SONARQUBE_TOKEN = ''
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/pramod348/CICD-Project.git']])
+            }
+        }
+    
+        stage('Hello World') {
+            steps {
+                helloWorld()  // Calling the helloWorld function from the shared library
+            }
+        }
+        
+        stage('Load Environment Variables') {
+            steps {
+                script {
+                    def envFile = ''
+                    if (env.BRANCH_NAME == 'main') {
+                        envFile = '.env'
+                    } else if (env.BRANCH_NAME == 'dev') {
+                        envFile = '.env.dev'
+                    }
+
+                    if (envFile) {
+                        // Read the .env file and set environment variables
+                        def envVars = readFile(envFile).split('\n').collectEntries { line ->
+                            def (key, value) = line.split('=')
+                            [(key): value]
+                        }
+
+                        // Assign values to the environment variables
+                        env.SONARQUBE_URL = envVars['SONARQUBE_URL']
+                        env.SONARQUBE_PROJECT_KEY = envVars['SONARQUBE_PROJECT_KEY']
+                        env.SONARQUBE_TOKEN = envVars['SONARQUBE_TOKEN']
+                    }
+                }
+            }
+        }
+        
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    // Call shared library function for SonarQube analysis
+                    sonarQubeIntegration()  // Assuming sonarQubeIntegration is defined in your shared library
+                }
+            }
+        }
+    }
+}
