@@ -55,7 +55,7 @@ pipeline {
         stage('pushing image to docker hub') {
           steps {
             echo 'pushing image to docker hub'
-            sh 'docker login -u pramod348 -p Bruno@348
+            sh 'docker login -u pramod348 -p Bruno@348'
             sh 'docker push pramod348/uat:${BUILD_NUMBER}'
             }
         }
