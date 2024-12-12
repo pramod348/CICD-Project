@@ -1,5 +1,5 @@
 ##artifact build stage
-FROM maven AS buildstage
+FROM docker.io/library/maven:3.8 AS buildstage
 RUN mkdir /opt/pramod
 WORKDIR /opt/pramod
 COPY . .
