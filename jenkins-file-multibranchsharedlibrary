@@ -10,9 +10,9 @@ pipeline {
 
     environment {
         // Define SonarQube-related variables globally so they are accessible in all stages
-        SONARQUBE_URL = ''
+        SONARQUBE_HOST_URL = ''
         SONARQUBE_PROJECT_KEY = ''
-        SONARQUBE_TOKEN = ''
+        SONARQUBE_AUTH_TOKEN = ''
     }
 
     stages {
@@ -46,9 +46,9 @@ pipeline {
                         }
 
                         // Assign values to the environment variables
-                        env.SONARQUBE_URL = envVars['SONARQUBE_URL']
+                        env.SONARQUBE_HOST_URL = envVars['SONARQUBE_HOST_URL']
                         env.SONARQUBE_PROJECT_KEY = envVars['SONARQUBE_PROJECT_KEY']
-                        env.SONARQUBE_TOKEN = envVars['SONARQUBE_TOKEN']
+                        env.SONARQUBE_HOST_TOKEN = envVars['SONARQUBE_AUTH_TOKEN']
                     }
                 }
             }
@@ -58,7 +58,7 @@ pipeline {
             steps {
                 script {
                     // Call shared library function for SonarQube analysis
-                    sonarQubeIntegration()  // Assuming sonarQubeIntegration is defined in your shared library
+                    sonarMultibranch()  // Assuming sonarQubeIntegration is defined in your shared library
                 }
             }
         }
