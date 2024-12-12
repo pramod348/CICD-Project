@@ -37,5 +37,28 @@ pipeline {
                 }
             }
         }
+
+       stage('Buid artifact') {
+         steps {
+           echo 'building artifact'
+           sh 'mvn clean package'
+            }
+          }
+
+       stage('building docker image') {
+         steps {
+            echo 'building docker image'
+            sh 'docker build -t pramod348/uat:${BUILD_NUMBER} .'
+             }
+           }
+
+        stage('pushing image to docker hub') {
+          steps {
+            echo 'pushing image to docker hub'
+            sh 'docker login -u pramod348 -p Bruno@348
+            sh 'docker push pramod348/uat:${BUILD_NUMBER}'
+            }
+        }
+                
     }
 }
