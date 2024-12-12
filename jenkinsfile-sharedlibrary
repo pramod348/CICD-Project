@@ -23,7 +23,7 @@ pipeline {
         stage('Load Environment variables') {
             steps {
                 script {
-                    loadEnv('.env')  // Load environment variables from the .env file
+                    loadEnv('.env-dev')  // Load environment variables from the .env file
                     echo 'Loaded SONAR_URL: ${env.SONAR_URL}'
                     echo 'Loaded SONAR_PROJECT_KEY: ${env.SONAR_PROJECT_KEY}'
                 }
