@@ -23,9 +23,24 @@ pipeline {
         stage('Load Environment variables') {
             steps {
                 script {
-                    loadEnv('.env')  // Load environment variables from the .env file
-                    echo 'Loaded SONAR_URL: ${env.SONAR_URL}'
-                    echo 'Loaded SONAR_PROJECT_KEY: ${env.SONAR_PROJECT_KEY}'
+                    def envFile = ''
+                    if (env.BRANCH_NAME == 'main') {
+                        envFile =  '.env'
+                    } else if (env.BRANCH_NAME== 'dev') {
+                        envFile = '.env.dev'
+                    }
+                    if (envFile) {
+                        def envVars = readFile(envFile).split('\n').collectEntries { line ->
+                            def (key, value) = line.split('=')
+                            [(key): value]
+                        }
+                        // set environment variables for sonarqube
+                        env.SONARQUBE_URL = envVars['SONARQUBE_URL']
+                        env.SONARQUBE_PROJECT_KEY = envVars['SONARQUBE_PROJECT_KEY']
+                        env.SONARQUBE_TOKEN = envVars['SONARQUBE_TOKEN']
+                    // loadEnv('.env')  // Load environment variables from the .env file
+                    // echo 'Loaded SONAR_URL: ${env.SONAR_URL}'
+                    // echo 'Loaded SONAR_PROJECT_KEY: ${env.SONAR_PROJECT_KEY}'
                 }
             }
         }
