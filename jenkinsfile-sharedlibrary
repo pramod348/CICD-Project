@@ -36,7 +36,7 @@ environment {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    //sonarQubeIntegration()  // Perform SonarQube integration
+                    sonarQubeIntegration()  // Perform SonarQube integration
                 }
             }
         }
