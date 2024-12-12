@@ -1,6 +1,9 @@
 @Library("jenkins-shared-libraries") _
 pipeline {
     agent any  // This tells Jenkins to run the pipeline on any available agent
+environment {
+    CGROUP_MANAGER = 'cgroupfs'
+}
     
     tools {
         jdk 'JAVA_HOME'
