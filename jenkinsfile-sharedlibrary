@@ -58,8 +58,8 @@ environment {
         stage('pushing image to docker hub') {
           steps {
             echo 'pushing image to docker hub'
-            sh 'docker login -u pramod348 -p Bruno@348'
-            sh 'docker push pramod348/uat:${BUILD_NUMBER}'
+            sh 'podman login -u pramod348 -p Bruno@348 docker.io'
+            sh 'podman push pramod348/uat:${BUILD_NUMBER}'
             }
         }
                 
