@@ -54,7 +54,7 @@ pipeline {
        stage('building docker image') {
          steps {
             echo 'building docker image'
-            sh 'podman build -t pramod348/uat:${BUILD_NUMBER} .'
+            sh 'podman build -t pramod348/cicd:${BUILD_NUMBER} .'
              }
            }
 
