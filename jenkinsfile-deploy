@@ -73,7 +73,7 @@ pipeline {
                         git config --global user.email "pramodchandu@gmail.com"
                         
                         # Update deployment file with new image tag
-                        sed -i "s/CICD:.*/CICD:${BUILD_NUMBER}/g" deploymentfiles/deployment.yaml
+                        sed -i "s/CICD:.*/CICD:${BUILD_NUMBER}/g" deploymentfiles/deployment.yml
                         
                         # Add, commit, and push changes
                         git add .
