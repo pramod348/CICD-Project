@@ -32,7 +32,8 @@ environment {
                 }
             }
         }
-        
+
+       /*
         stage('SonarQube Analysis') {
             steps {
                 script {
@@ -40,6 +41,7 @@ environment {
                 }
             }
         }
+       */
 
        stage('Buid artifact') {
          steps {
