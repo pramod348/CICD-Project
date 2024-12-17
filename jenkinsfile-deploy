@@ -81,7 +81,7 @@ pipeline {
                         git commit -m "Updated image tag to ${BUILD_NUMBER}"
                         
                         # Use GitHub username and Personal Access Token (replace <TOKEN> with your PAT)
-                        git push https://${GITHUB_USER_NAME}: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}@github.com/${GITHUB_USERNAME}/${GITHUB_REPO_NAME} HEAD:dev
+                        git push https://${GITHUB_USERNAME}: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}@github.com/${GITHUB_USERNAME}/${GITHUB_REPO_NAME}.git HEAD:dev
                     '''
                 }
             }
