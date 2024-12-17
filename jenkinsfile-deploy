@@ -1,0 +1,87 @@
+@Library("jenkins-shared-libraries") _
+pipeline {
+    agent any  // Run on any available Jenkins agent
+
+    environment {
+        CGROUP_MANAGER = 'cgroupfs'
+    }
+
+    tools {
+        jdk 'JAVA_HOME'
+        maven 'MAVEN_HOME'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/pramod348/CICD-Project.git']])
+            }
+        }
+    
+        stage('helloworld') {
+            steps {
+                helloWorld()  // Calling the helloWorld function from shared library
+            }
+        }
+        
+        stage('Load Environment Variables') {
+            steps {
+                script {
+                    loadEnv('.env')  // Load environment variables
+                    echo "Loaded SONAR_URL: ${env.SONAR_HOST_URL}"
+                    echo "Loaded SONAR_PROJECT_KEY: ${env.SONAR_PROJECT_KEY}"
+                }
+            }
+        }
+
+        stage('Build Artifact') {
+            steps {
+                echo 'Building artifact'
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Docker image'
+                sh "podman build -t pramod348/cicd:${env.BUILD_NUMBER} ."
+            }
+        }
+
+        stage('Push Docker Image to Docker Hub') {
+            steps {
+                echo 'Pushing image to Docker Hub'
+                sh '''
+                    podman login -u pramod348 -p Bruno@348 docker.io
+                    podman push pramod348/cicd:${BUILD_NUMBER}
+                '''
+            }
+        }
+
+        stage('Update Deployment Files in GitHub') {
+
+            environment {
+              GITHUB_REPO_NAME = "CICD-Project"
+              GITHUB_USERNAME = "pramod348"
+            steps {
+                echo 'Updating deployment files in GitHub'
+                script {
+                    sh '''
+                        git config --global user.name "pramod kumar sampathi"
+                        git config --global user.email "pramodchandu@gmail.com"
+                        
+                        # Update deployment file with new image tag
+                        sed -i "s/CICD:.*/CICD:${BUILD_NUMBER}/g" deploymentfiles/deployment.yaml
+                        
+                        # Add, commit, and push changes
+                        git add .
+                        git commit -m "Updated image tag to ${BUILD_NUMBER}"
+                        
+                        # Use GitHub username and Personal Access Token (replace <TOKEN> with your PAT)
+                        git push https://pramod348:$githubtoken@github.com/$GITHUB_USERNAME/$GITHUB_REPO_NAME.git HEAD:dev
+                    '''
+                }
+            }
+        }
+    }
+}
