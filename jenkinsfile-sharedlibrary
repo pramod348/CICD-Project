@@ -65,6 +65,26 @@ pipeline {
             sh 'podman push pramod348/uat:${BUILD_NUMBER}'
             }
         }
-                
+
+       stage('updating deployment files') {
+         echo 'updating deployment files in github'
+
+          environment {
+            GITHUB_REPO_NAME = 'CICD-project'
+            GITHUB_USER_NAME = 'pramod348'
+           }
+ 
+         steps {
+           sh '''
+             git config --global user.name "pramod kumar sampathi"
+             git config --global user.email "pramodchandu@gmail.com"
+             BUILD_NUMBER=${BUILD_NUMBER}
+             sed -i "s/CICD:.*/CICD:{$BUILD_NUMBER}/g" deploymentfiles/deployment.yaml
+             git add .
+             git commit -m 'updated image tag as $BUILD_NUMBER'
+             git push https://github.com/pramod348/CICD-Project.git/${GITHUB_REPO}/${GIHUB_USER_NAME} HEAD:dev
+           '''
+         }
+        }
     }
 }
