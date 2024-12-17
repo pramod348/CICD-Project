@@ -63,6 +63,8 @@ pipeline {
             environment {
               GITHUB_REPO_NAME = "CICD-Project"
               GITHUB_USERNAME = "pramod348"
+            }
+
             steps {
                 echo 'Updating deployment files in GitHub'
                 script {
